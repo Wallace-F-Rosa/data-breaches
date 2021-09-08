@@ -23,22 +23,23 @@ class DataBreachTestCase(APITestCase):
         # successfull case
         create_url = reverse('databreaches-list')
         data = {
-            'entity' : 'Test',
-            'year' : '2021',
-            'recors' : 10000,
-            'organization_type' : 'web',
+            'entity' : {
+                'name' : 'Test',
+                'organization_type' : ['web']
+            },
+            'year' : 2021,
+            'records' : 10000,
             'method' : 'hacking',
-            'sources' : ['https://pt.wikipedia.org/wiki/Wikip%C3%A9dia:P%C3%A1gina_principal']
+            'sources' : [{'url' : 'https://pt.wikipedia.org/wiki/Wikip%C3%A9dia:P%C3%A1gina_principal' }]
         }
-        response = self.client.post(create_url, json.dumps(data), format=json)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        response = self.client.post(create_url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
         
         # request missing data
         create_url = reverse('databreaches-list')
         data = {
             'year' : '2021',
             'recors' : 10000,
-            'organization_type' : 'web',
             'method' : 'hacking',
             'sources' : ['https://pt.wikipedia.org/wiki/Wikip%C3%A9dia:P%C3%A1gina_principal']
         }
@@ -47,10 +48,12 @@ class DataBreachTestCase(APITestCase):
 
         # request with invalid data
         data = {
-            'entity' : 'Test',
+            'entity' : {
+                'name' : 'Test',
+                'organization_type' : ['web']
+            },
             'year' : '2021',
-            'recors' : 10000,
-            'organization_type' : 'web',
+            'recors' : -120,
             'method' : 'hacking',
             'sources' : ['https://pt.wikipedia.org/wiki/Wikip%C3%A9dia:P%C3%A1gina_principal']
         }

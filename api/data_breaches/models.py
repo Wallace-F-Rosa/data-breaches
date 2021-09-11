@@ -13,7 +13,7 @@ class Source(models.Model):
         Source - DataBreach (N:1) : one data breach can have many midia sources as reference.
     """
     url = models.URLField()
-    data_breach = models.ForeignKey('DataBreach', on_delete=models.PROTECT)
+    data_breach = models.ForeignKey('DataBreach', related_name='databreach',on_delete=models.PROTECT)
 
 class OrganizationType(models.Model):
     """
@@ -60,7 +60,7 @@ class DataBreach(models.Model):
         involved in many data breaches.
         DataBreach - OrganizationType (1:N) : The entity related to the data breach can have
     """
-    entity = models.ForeignKey('Entity', on_delete=models.PROTECT)
+    entity = models.ForeignKey('Entity', related_name='entity',on_delete=models.PROTECT)
     year = models.PositiveSmallIntegerField()
     records = models.PositiveIntegerField()
     method = models.CharField(max_length=30)

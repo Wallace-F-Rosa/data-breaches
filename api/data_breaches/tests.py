@@ -30,7 +30,7 @@ class DataBreachTestCase(APITestCase):
             'year' : 2021,
             'records' : 10000,
             'method' : 'hacking',
-            'sources' : [{'url' : 'https://pt.wikipedia.org/wiki/Wikip%C3%A9dia:P%C3%A1gina_principal' }]
+            'sources' : ['https://pt.wikipedia.org/wiki/Wikip%C3%A9dia:P%C3%A1gina_principal']
         }
         response = self.client.post(create_url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
@@ -43,7 +43,7 @@ class DataBreachTestCase(APITestCase):
             'method' : 'hacking',
             'sources' : ['https://pt.wikipedia.org/wiki/Wikip%C3%A9dia:P%C3%A1gina_principal']
         }
-        response = self.client.post(create_url, json.dumps(data), format=json)
+        response = self.client.post(create_url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         # request with invalid data
@@ -57,7 +57,7 @@ class DataBreachTestCase(APITestCase):
             'method' : 'hacking',
             'sources' : ['https://pt.wikipedia.org/wiki/Wikip%C3%A9dia:P%C3%A1gina_principal']
         }
-        response = self.client.post(create_url, json.dumps(data), format=json)
+        response = self.client.post(create_url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_update(self):

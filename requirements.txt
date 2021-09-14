@@ -2,3 +2,5 @@ Django
 djangorestframework
 markdown
 django-filter
+sphinx
+sphinx-rtd-theme

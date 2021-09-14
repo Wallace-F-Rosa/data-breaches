@@ -30,6 +30,27 @@ class DataBreachSerializer(serializers.ModelSerializer):
         using context to pass extra data to serializer. All objects are
         created in a transaction so either the operation is successfull 
         or a rollback will be called.
+
+        Extra data:
+            * entity (dict) : entity data is passed as the organization `name` and a list of str with words describing the sphere of action of the organization, `organization_type`.
+
+            * sources (list) : list of urls of midia sources that described the data breach.
+
+        Example :
+
+        .. code-block:: json
+
+            {
+                "entity" : {
+                    "name" : "Test",
+                    "organization_type" : ["web"]
+                },
+                "year" : 2021,
+                "records" : 10000,
+                "method" : "hacking",
+                "sources" : ["https://pt.wikipedia.org/wiki/Wikip%C3%A9dia:P%C3%A1gina_principal"]
+            }
+
         """
         databreach = None
         with transaction.atomic() :

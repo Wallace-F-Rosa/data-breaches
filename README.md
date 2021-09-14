@@ -4,6 +4,15 @@ This is a small learning project to study back-end development.
 ## Overview
 An API that provides information about data breaches public reported(news, articles, press reports, etc). Inpired by [Wikipidia's List of Data Breaches](https://en.wikipedia.org/wiki/List_of_data_breaches). Built using [Python](https://www.python.org/) as programming language, [Django](https://www.djangoproject.com/) as the web framework and [Django REST framework](https://www.django-rest-framework.org/) as a toolkit to build Web APIs.
 
+# Requirements
+* Python 3
+* Django
+* Rest Framework
+* sphinx (documentation)
+
+## Install requirements
+`pip install -r requirements`
+
 ## Live Demo
     TODO
 
@@ -32,7 +41,17 @@ The full detail about a data breach can be acquired in '/databreaches/<id>' usin
 
 
 ## Documentation
+### Endpoints
 The API is self describing as it is built using the [Django REST framework](https://www.django-rest-framework.org/topics/documenting-your-api/#self-describing-apis). Running the project and accessing the urls in the browser will provide the full documentation for each endpoint.
+
+### Complete documentation
+Offline documentation is built using `sphinx`:
+```
+cd api/docs
+make html
+```
+
+This will provide documentation on html that you can access on api/docs/_build/index.html.
 
 ## Install and run locally
 * Installing dependencies:

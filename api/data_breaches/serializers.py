@@ -8,6 +8,7 @@ class SourceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class EntitySerializer(serializers.ModelSerializer):
+    name = serializers.CharField()
     class Meta:
         model = Entity
         fields = '__all__'
@@ -23,6 +24,46 @@ class DataBreachSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     entity = EntitySerializer()
+
+    def to_representation(self, obj):
+        """
+        Override to return correct representation of the DataBreach object as a
+        dictionary with nested Entity, OrganizationType and Source objects.
+
+        Args:
+            obj (DataBreach) : The DataBreach object.
+
+        Returns:
+            Dictionary with correct DataBreach data representantion.
+        Example of correct representation:
+
+        .. code-block:: json
+
+            {
+                "entity" : {
+                    "name" : "Test",
+                    "organization_type" : ["web"]
+                },
+                "year" : 2021,
+                "records" : 10000,
+                "method" : "hacking",
+                "sources" : ["https://pt.wikipedia.org/wiki/Wikip%C3%A9dia:P%C3%A1gina_principal"]
+            }
+        """
+        entity = Entity.objects.get(pk=obj.entity.id)
+        org_type = OrganizationType.objects.filter(entity=entity)
+        sources = Source.objects.filter(data_breach=obj)
+
+        return {
+            'entity' : {
+                'name' : entity.name,
+                'organization_type' : [org.organization_type for org in org_type]
+            },
+            'year' : obj.year,
+            'records' : obj.records,
+            'method' : obj.method,
+            'sources' : [s.url for s in sources]
+        }
 
     def create(self, validated_data):
         """
@@ -57,10 +98,9 @@ class DataBreachSerializer(serializers.ModelSerializer):
             # create entity
             entity_data = validated_data.pop('entity')
 
-            entity, created = Entity.objects.get_or_create(name=entity_data['name'])
-
             # create organization type
-            if created :
+            entity, created = Entity.objects.get_or_create(name=entity_data['name'])
+            if created:
                 org_data = self.context['request'].data['entity']['organization_type']
                 orgs = []
                 for org in org_data:
@@ -86,5 +126,4 @@ class DataBreachSerializer(serializers.ModelSerializer):
             source_serializer = SourceSerializer(data=sources, many=True)
             if not source_serializer.is_valid():
                 raise serializers.ValidationError(source_serializer.errors)
-
         return databreach

@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
+from .models import *
 import json
 
 # Create your tests here.
@@ -16,9 +17,9 @@ class DataBreachTestCase(APITestCase):
 
     def test_create(self):
         """Testing create action of /databreaches endpoint on:
-            - Successfull case
-            - Request missing data
-            - Request containing invalid fields
+            * Successfull case
+            * Request missing data
+            * Request containing invalid fields
         """
         # successfull case
         create_url = reverse('databreaches-list')
@@ -34,6 +35,12 @@ class DataBreachTestCase(APITestCase):
         }
         response = self.client.post(create_url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
+        
+        # dont duplicate entity
+        response = self.client.post(create_url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
+        entity_count = Entity.objects.filter(name=data['name']).count()
+        self.assertEqual(entity_count, 1)
         
         # request missing data
         create_url = reverse('databreaches-list')

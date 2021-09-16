@@ -56,24 +56,21 @@ class DataBreachSerializer(serializers.ModelSerializer):
         with transaction.atomic() :
             # create entity
             entity_data = validated_data.pop('entity')
-            entity_serializer = EntitySerializer(data={
-                'name' : entity_data['name']
-            })
-            if not entity_serializer.is_valid():
-                raise serializers.ValidationError(entity_serializer.errors)
-            entity = entity_serializer.save()
+
+            entity, created = Entity.objects.get_or_create(name=entity_data['name'])
 
             # create organization type
-            org_data = self.context['request'].data['entity']['organization_type']
-            orgs = []
-            for org in org_data:
-                orgs.append({
-                    'organization_type' : org,
-                    'entity' : entity.id
-                })
-            org_serializer = OrganizationTypeSerializer(data=orgs, many=True)
-            if not org_serializer.is_valid():
-                raise serializers.ValidationError(org_serializer.errors)
+            if created :
+                org_data = self.context['request'].data['entity']['organization_type']
+                orgs = []
+                for org in org_data:
+                    orgs.append({
+                        'organization_type' : org,
+                        'entity' : entity.id
+                    })
+                org_serializer = OrganizationTypeSerializer(data=orgs, many=True)
+                if not org_serializer.is_valid():
+                    raise serializers.ValidationError(org_serializer.errors)
 
             # create databreach object
             databreach = DataBreach.objects.create(**validated_data, entity=entity)

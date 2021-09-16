@@ -39,7 +39,7 @@ class DataBreachTestCase(APITestCase):
         # dont duplicate entity
         response = self.client.post(create_url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
-        entity_count = Entity.objects.filter(name=data['name']).count()
+        entity_count = Entity.objects.filter(name=data['entity']['name']).count()
         self.assertEqual(entity_count, 1)
         
         # request missing data

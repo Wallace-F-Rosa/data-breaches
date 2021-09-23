@@ -1,9 +1,7 @@
-from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from .models import *
-import json
 
 # Create your tests here.
 class DataBreachTestCase(APITestCase):
@@ -12,8 +10,72 @@ class DataBreachTestCase(APITestCase):
         pass
         # TODO: add data breaches required to test. search some on https://en.wikipedia.org/wiki/List_of_data_breaches.
 
+    def compareDataBreaches(self, dt0, dt1):
+        """Compare two databreaches json data.
+
+        Args:
+            dt0 (dict) : dictionary containing json data of a data breach.
+            dt1 (dict) : dictionary containing json data of a data breach.
+
+        Return:
+            Returns True if data breaches have the same entity, records, year,
+        , method and sources. False is returned otherwise.
+        """
+        fields = ['entity',  'year', 'records', 'method', 'sources']
+        for field in fields:
+            if dt0[field] != dt1[field]:
+                return False
+
+        return True
+
     def test_list(self):
-        pass
+        """Testing update action of /databreaches endpoint. This action
+        should list all databreaches available.
+        """
+        # add some data breaches
+        list_url = reverse('databreaches-list')
+
+        data = [
+                {
+                    "entity": {
+                        "name": "21st Century Oncology",
+                        "organization_type": [
+                            "healthcare"
+                        ]
+                    },
+                    "year": 2016,
+                    "records": 2200000,
+                    "method": "hacked",
+                    "sources": [
+                        "https://gizmodo.com/mother-of-all-breaches-exposes-773-million-emails-21-m-1831833456",
+                        "http://cbs12.com/news/local/21st-century-oncology-notifies-22-million-of-hacking-data-breach"
+                    ]
+                },
+                {
+                    "entity": {
+                        "name": "500px",
+                        "organization_type": [
+                            "social networking"
+                        ]
+                    },
+                    "year": 2020,
+                    "records": 14870304,
+                    "method": "hacked",
+                    "sources": [
+                        "http://www.natlawreview.com/article/oh-no-not-again-chalk-yet-another-health-data-breach"
+                    ]
+                }
+        ]
+
+        for dt in data:
+            response = self.client.post(list_url, dt, format='json')
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
+
+        response = self.client.get(list_url)
+        self.assertEqual(len(response.data), 2)
+        for i in range(len(data)):
+            self.assertTrue(self.compareDataBreaches(data[i], response.data[i]), "Data is different !\nOriginal Data : " + str(data[i]) + '\nReponse from API: ' + str(response.data[i]))
+
 
     def test_create(self):
         """Testing create action of /databreaches endpoint on:

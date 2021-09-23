@@ -19,15 +19,6 @@ An API that provides information about data breaches public reported(news, artic
 ## Data breach
 Information about a data breaches can be listed in `/databreaches`. The data listed has the following fields:
 
-| field | description | type |
-|---|---|---|
-| id | unique identifier of the data breach | integer |
-| entity | entity where the data breach happened | string |
-| year | year when the data breach ocurred | integer |
-
-
-### Details
-The full detail about a data breach can be acquired in '/databreaches/<id>' using the id of the data breach. The data listed contains:
 
 | field | description | type |
 |---|---|---|
@@ -39,6 +30,8 @@ The full detail about a data breach can be acquired in '/databreaches/<id>' usin
 | method | which method was used in the breaching process | string |
 | sources | list of sources mentioning the breach | list |
 
+### Details
+The data about a specific data breach can be acquired in '/databreaches/<id>' using the id of the data breach.
 
 ## Documentation
 ### Endpoints

@@ -54,7 +54,7 @@ class DataBreachSerializer(serializers.ModelSerializer):
         entity = Entity.objects.get(pk=obj.entity.id)
         org_type = OrganizationType.objects.filter(entity=entity)
         sources = Source.objects.filter(data_breach=obj)
-
+        
         return {
             'id' : obj.id,
             'entity' : {
@@ -113,6 +113,7 @@ class DataBreachSerializer(serializers.ModelSerializer):
                 org_serializer = OrganizationTypeSerializer(data=orgs, many=True)
                 if not org_serializer.is_valid():
                     raise serializers.ValidationError(org_serializer.errors)
+                org_serializer.save()
 
             # create databreach object
             databreach = DataBreach.objects.create(**validated_data, entity=entity)
@@ -128,4 +129,5 @@ class DataBreachSerializer(serializers.ModelSerializer):
             source_serializer = SourceSerializer(data=sources, many=True)
             if not source_serializer.is_valid():
                 raise serializers.ValidationError(source_serializer.errors)
+            source_serializer.save()
         return databreach

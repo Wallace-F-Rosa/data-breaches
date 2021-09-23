@@ -44,7 +44,7 @@ cd api/docs
 make html
 ```
 
-This will provide documentation on html that you can access on api/docs/_build/index.html.
+This will provide html documentation on api/docs/_build/index.html.
 
 ## Install and run locally
 * Installing dependencies:

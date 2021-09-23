@@ -40,6 +40,7 @@ class DataBreachSerializer(serializers.ModelSerializer):
         .. code-block:: json
 
             {
+                "id" : 1,
                 "entity" : {
                     "name" : "Test",
                     "organization_type" : ["web"]
@@ -55,6 +56,7 @@ class DataBreachSerializer(serializers.ModelSerializer):
         sources = Source.objects.filter(data_breach=obj)
 
         return {
+            'id' : obj.id,
             'entity' : {
                 'name' : entity.name,
                 'organization_type' : [org.organization_type for org in org_type]

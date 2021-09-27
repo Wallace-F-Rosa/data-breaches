@@ -7,8 +7,8 @@ from .models import *
 class DataBreachTestCase(APITestCase):
     """Test case for CRUD and list functionalities on data breaches."""
     def setUp(self):
-        pass
         # TODO: add data breaches required to test. search some on https://en.wikipedia.org/wiki/List_of_data_breaches.
+        self.list_url = reverse('databreaches-list')
 
     def compareDataBreaches(self, dt0, dt1):
         """Compare two databreaches json data.
@@ -33,7 +33,7 @@ class DataBreachTestCase(APITestCase):
         should list all databreaches available.
         """
         # add some data breaches
-        list_url = reverse('databreaches-list')
+        list_url = self.list_url
 
         data = [
                 {
@@ -84,11 +84,10 @@ class DataBreachTestCase(APITestCase):
             * Request containing invalid fields
         """
         # successfull case
-        create_url = reverse('databreaches-list')
+        create_url = self.list_url
         data = {
             'entity' : {
-                'name' : 'Test',
-                'organization_type' : ['web']
+                'name' : 'Test'
             },
             'year' : 2021,
             'records' : 10000,
@@ -105,7 +104,6 @@ class DataBreachTestCase(APITestCase):
         self.assertEqual(entity_count, 1)
         
         # request missing data
-        create_url = reverse('databreaches-list')
         data = {
             'year' : '2021',
             'recors' : 10000,
@@ -130,7 +128,58 @@ class DataBreachTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_update(self):
-        pass
+        """Test update of data breaches data. Cover the cases below:
+            * Valid update
+            * Update missing id
+            * Request containing invalid fields
+        """
+        # criar objetos
+        data = [
+                {
+                    "entity": {
+                        "name": "21st Century Oncology",
+                        "organization_type": [
+                            "healthcare"
+                        ]
+                    },
+                    "year": 2016,
+                    "records": 2200000,
+                    "method": "hacked",
+                    "sources": [
+                        "https://gizmodo.com/mother-of-all-breaches-exposes-773-million-emails-21-m-1831833456",
+                        "http://cbs12.com/news/local/21st-century-oncology-notifies-22-million-of-hacking-data-breach"
+                    ]
+                },
+                {
+                    "entity": {
+                        "name": "500px",
+                        "organization_type": [
+                            "social networking"
+                        ]
+                    },
+                    "year": 2020,
+                    "records": 14870304,
+                    "method": "hacked",
+                    "sources": [
+                        "http://www.natlawreview.com/article/oh-no-not-again-chalk-yet-another-health-data-breach"
+                    ]
+                }
+        ]
+
+        create_url = self.list_url
+        for i in range(len(data)):
+            response = self.client.post(create_url, data=data[i], format='json')
+            data[i] = response.data
+        
+        # successfull update
+        db_id = data[0]['id']
+        update_url = reverse('databreaches-detail', args=[db_id])
+        data[0]['entity'] = {
+            'name' : 'Microsoft',
+            'organization_type' : ['software']
+        }
+        response = self.client.put(update_url, data=data[0], format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.data)
 
     def test_delete(self):
         pass

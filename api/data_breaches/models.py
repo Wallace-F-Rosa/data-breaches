@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator
 
 # Create your models here.
 class Source(models.Model):
@@ -61,6 +62,6 @@ class DataBreach(models.Model):
         * DataBreach - OrganizationType (1:N) : The entity related to the data breach can have
     """
     entity = models.ForeignKey('Entity', related_name='entity',on_delete=models.PROTECT)
-    year = models.PositiveSmallIntegerField()
-    records = models.PositiveIntegerField()
+    year = models.PositiveSmallIntegerField(validators=[MinValueValidator(1970)])
+    records = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     method = models.CharField(max_length=30)

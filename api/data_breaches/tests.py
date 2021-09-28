@@ -130,7 +130,6 @@ class DataBreachTestCase(APITestCase):
     def test_update(self):
         """Test update of data breaches data. Cover the cases below:
             * Valid update
-            * Update missing id
             * Request containing invalid fields
         """
         # criar objetos
@@ -180,6 +179,11 @@ class DataBreachTestCase(APITestCase):
         }
         response = self.client.put(update_url, data=data[0], format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK, response.data)
+
+        # request with invalid data
+        data[1]['year'] = -1200
+        response = self.client.put(update_url, data=data[1], format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.data)
 
     def test_delete(self):
         pass

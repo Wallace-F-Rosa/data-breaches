@@ -210,20 +210,21 @@ class DataBreachSerializer(serializers.ModelSerializer):
         of the instance. that needs to be updated.
         """
         with transaction.atomic():
-            request_data = self.context['request'].data
-            instance.year = request_data.get('year', instance.year)
-            instance.records = request_data.get('records', instance.records)
-            instance.method = request_data.get('method', instance.method)
+            print(validated_data)
+            instance.year = validated_data.get('year', instance.year)
+            instance.records = validated_data.get('records', instance.records)
+            instance.method = validated_data.get('method', instance.method)
 
+            extra_data = self.context['extra']
             entity = instance.entity
-            if 'entity' in request_data:
+            if 'entity' in extra_data:
                 entity_serializer = EntitySerializer(
                     data={
-                        'name' : request_data['entity']['name']
+                        'name' : extra_data['entity']['name']
                     }, 
                     context={
                         'extra' : {
-                            'organization_type' : request_data['entity']['organization_type']
+                            'organization_type' : extra_data['entity']['organization_type']
                     }
                 })
                 entity_serializer.is_valid(raise_exception=True)

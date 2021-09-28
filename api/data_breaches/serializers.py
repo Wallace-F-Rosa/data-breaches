@@ -210,7 +210,6 @@ class DataBreachSerializer(serializers.ModelSerializer):
         of the instance. that needs to be updated.
         """
         with transaction.atomic():
-            print(validated_data)
             instance.year = validated_data.get('year', instance.year)
             instance.records = validated_data.get('records', instance.records)
             instance.method = validated_data.get('method', instance.method)

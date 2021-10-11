@@ -225,7 +225,7 @@ class DataBreachTestCase(APITestCase):
         for i in range(len(data)):
             delete_url = reverse('databreaches-detail', args=[data[i]['id']])
             response = self.client.delete(delete_url)
-            self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED, response.data)
+            self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT, response.data)
 
 class MethodsTestCase(APITestCase):
     pass

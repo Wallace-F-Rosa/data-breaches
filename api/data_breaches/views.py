@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets, response, status
 from rest_framework.decorators import action
 from .models import *
 from .serializers import *
@@ -53,3 +53,14 @@ class DataBreachViewSet(viewsets.ModelViewSet):
             'extra' : extra_data
         })
         return context
+
+    def destroy(self, request, *args, **kwargs):
+        """Override to delete sources when data breach is deleted."""
+        instance = self.get_object()
+        with transaction.atomic():
+            sources = Source.objects.filter(data_breach=instance)
+            for s in sources:
+                s.delete()
+            self.perform_destroy(instance)
+
+        return response.Response(status=status.HTTP_204_NO_CONTENT)

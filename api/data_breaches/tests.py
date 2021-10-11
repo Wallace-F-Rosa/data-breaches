@@ -186,8 +186,46 @@ class DataBreachTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, response.data)
 
     def test_delete(self):
-        pass
+        data = [
+                {
+                    "entity": {
+                        "name": "21st Century Oncology",
+                        "organization_type": [
+                            "healthcare"
+                        ]
+                    },
+                    "year": 2016,
+                    "records": 2200000,
+                    "method": "hacked",
+                    "sources": [
+                        "https://gizmodo.com/mother-of-all-breaches-exposes-773-million-emails-21-m-1831833456",
+                        "http://cbs12.com/news/local/21st-century-oncology-notifies-22-million-of-hacking-data-breach"
+                    ]
+                },
+                {
+                    "entity": {
+                        "name": "500px",
+                        "organization_type": [
+                            "social networking"
+                        ]
+                    },
+                    "year": 2020,
+                    "records": 14870304,
+                    "method": "hacked",
+                    "sources": [
+                        "http://www.natlawreview.com/article/oh-no-not-again-chalk-yet-another-health-data-breach"
+                    ]
+                }
+        ]
+        create_url = self.list_url
+        for i in range(len(data)):
+            response = self.client.post(create_url, data=data[i], format='json')
+            data[i] = response.data
 
+        for i in range(len(data)):
+            delete_url = reverse('databreaches-detail', args=[data[i]['id']])
+            response = self.client.delete(delete_url)
+            self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED, response.data)
 
 class MethodsTestCase(APITestCase):
     pass

@@ -11,7 +11,7 @@ An API that provides information about data breaches public reported(news, artic
 * sphinx (documentation)
 
 ## Install requirements
-`pip install -r api/requirements`
+`pip install -r requirements`
 
 ## Live Demo
     TODO
@@ -49,7 +49,7 @@ This will provide html documentation on api/docs/_build/index.html.
 ## Install and run locally
 * Installing dependencies:
 
-    `pip install -r api/requirements.txt`
+    `pip install -r requirements.txt`
 
 * Apply migrations:
     `python manage.py migrate`

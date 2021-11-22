@@ -4,3 +4,5 @@ markdown
 django-filter
 sphinx
 sphinx-rtd-theme
+django-heroku
+gunicorn

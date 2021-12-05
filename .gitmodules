@@ -1,0 +1,3 @@
+[submodule "scrape-data-breaches"]
+	path = scrape-data-breaches
+	url = git@github.com:Wallace-F-Rosa/scrape-data-breaches.git

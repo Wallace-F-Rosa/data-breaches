@@ -23,9 +23,7 @@ Information about a data breaches can be listed in `/databreaches`. The data lis
 | field | description | type |
 |---|---|---|
 | id | unique identifier of the data breach | integer |
-| entity | data about the entity where the data breach happened. contains the
-name of the organization (string) and a list of strings describing the line of
-work of the organization | dict |
+| entity | data about the entity where the data breach happened. contains the name of the organization (string) and a list of strings describing the line of work of the organization | dict |
 | year | year when the data breach ocurred | integer |
 | records | amount of records leaked | integer |
 | method | which method was used in the breaching process | string |

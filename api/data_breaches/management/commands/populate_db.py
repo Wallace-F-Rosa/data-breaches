@@ -13,8 +13,35 @@ class Command(BaseCommand):
         json_path = options['json_path']
         with open(json_path, 'r') as jsonf:
             data = json.load(jsonf)
-            serializer = DataBreachSerializer(data=data, many=True)
-            if serializer.is_valid():
-                serializer.save()
-            else:
-                print(serializer.errors)
+            for databreach in data:
+                try:
+                    entity_data = databreach.pop('entity')
+                    sources_data = databreach.pop('sources')
+
+                    entity, created = Entity.objects.get_or_create(name=entity_data['name'])
+                    if created:
+                        entity.save()
+
+                    for t in entity_data['organization_type']:
+                        ot_data = {
+                            'organization_type': t,
+                            'entity': entity.id
+                        }
+                        ot, created = OrganizationType.objects.get_or_create(organization_type=t, entity=entity)
+                        if created:
+                            ot.save()
+
+                    dtbreach = DataBreach(
+                        year=databreach['year'],
+                        records=databreach['records'],
+                        method=databreach['method'],
+                        entity=entity
+                    )
+                    dtbreach.save()
+
+                    for s in sources_data:
+                        source = Source(url=s, data_breach=dtbreach)
+                        source.save()
+                except Exception as e:
+                    print("Not possible to register databreach "+str(databreach)+
+                          " Error: "+str(e))

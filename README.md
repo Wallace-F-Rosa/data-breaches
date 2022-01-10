@@ -10,11 +10,36 @@ An API that provides information about data breaches public reported(news, artic
 * Rest Framework
 * sphinx (documentation)
 
+## Live Demo
+    TODO
+
 ## Install requirements
 `pip install -r requirements`
 
-## Live Demo
-    TODO
+## How to Run the project
+
+After installing the requirements, go to the 'api' directory:
+`cd api`
+
+Run the django migrations:
+`python manage.py migration`
+
+### Get the data from the scraper
+Initialize and update the 'scrape-data-breaches' submodule:
+`git submodule update --init`
+`cd scrape-data-breaches`
+`pip install -r requirements.txt`
+`python get_data.py`
+The data will be stored on the `data.json` file.
+
+### Populate the database
+Run the custom command `populate_db` providing the path to the json file
+containing the data breaches data:
+`cd ../api`
+
+### Run the project
+`python manage.py runserver`
+Django will output the localhost link to access the project.
 
 ## Data breach
 Information about a data breaches can be listed in `/databreaches`. The data listed has the following fields:

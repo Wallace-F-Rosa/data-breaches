@@ -29,13 +29,12 @@ Run the django migrations:
 ### Get the data from the scraper
 Initialize and update the 'scrape-data-breaches' submodule:
 
-`git submodule update --init`
-
-`cd scrape-data-breaches`
-
-`pip install -r requirements.txt`
-
-`python get_data.py`
+```
+git submodule update --init
+cd scrape-data-breaches`
+pip install -r requirements.txt
+python get_data.py
+```
 
 The data will be stored on the `data.json` file.
 

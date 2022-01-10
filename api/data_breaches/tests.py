@@ -29,7 +29,7 @@ class DataBreachTestCase(APITestCase):
         return True
 
     def test_list(self):
-        """Testing update action of /databreaches endpoint. This action
+        """Testing list action of /databreaches endpoint. This action
         should list all databreaches available.
         """
         # add some data breaches

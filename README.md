@@ -19,23 +19,35 @@ An API that provides information about data breaches public reported(news, artic
 ## How to Run the project
 
 After installing the requirements, go to the 'api' directory:
+
 `cd api`
 
 Run the django migrations:
+
 `python manage.py migration`
 
 ### Get the data from the scraper
 Initialize and update the 'scrape-data-breaches' submodule:
+
 `git submodule update --init`
+
 `cd scrape-data-breaches`
+
 `pip install -r requirements.txt`
+
 `python get_data.py`
+
 The data will be stored on the `data.json` file.
 
 ### Populate the database
+Go back to the `api` directory:
+
+`cd ../api`
+
 Run the custom command `populate_db` providing the path to the json file
 containing the data breaches data:
-`cd ../api`
+
+`python manage.py populate_db ../scrape-data-breaches/data.json`
 
 ### Run the project
 `python manage.py runserver`

@@ -48,7 +48,7 @@ class EntitySerializer(serializers.ModelSerializer):
         """
         with transaction.atomic():
             entity, created = Entity.objects.get_or_create(name=validated_data['name'])
-            if created:
+            if created and 'extra' in self.context:
                 org_data = self.context['extra'].get('organization_type', [])
                 orgs = []
                 for org in org_data:

@@ -1,8 +1,13 @@
 from django.shortcuts import render
 from rest_framework import viewsets, response, status
 from rest_framework.decorators import action
+from rest_framework.permissions import BasePermission, IsAuthenticated, SAFE_METHODS
 from .models import *
 from .serializers import *
+
+class ReadOnly(BasePermission):
+    def has_permission(self, request, view):
+        return request.method in SAFE_METHODS
 
 class DataBreachViewSet(viewsets.ModelViewSet):
     """
@@ -35,6 +40,14 @@ class DataBreachViewSet(viewsets.ModelViewSet):
     """
     queryset = DataBreach.objects.all()
     serializer_class = DataBreachSerializer
+    permission_classes=[IsAuthenticated|ReadOnly]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, many=isinstance(request.data, list))
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return response.Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def get_serializer_context(self):
         """Pass extra content to DataBreachSerializer using request context.

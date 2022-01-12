@@ -1,6 +1,7 @@
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
+from rest_framework_api_key.models import APIKey
 from .models import *
 
 # Create your tests here.
@@ -9,6 +10,8 @@ class DataBreachTestCase(APITestCase):
     def setUp(self):
         # TODO: add data breaches required to test. search some on https://en.wikipedia.org/wiki/List_of_data_breaches.
         self.list_url = reverse('databreaches-list')
+        self.api_key_obj, self.api_key = APIKey.objects.create_key(name='Testing APIKey')
+        self.client.credentials(HTTP_AUTHORIZATION='Api-Key ' + str(self.api_key))
 
     def compareDataBreaches(self, dt0, dt1):
         """Compare two databreaches json data.
@@ -66,6 +69,7 @@ class DataBreachTestCase(APITestCase):
                     ]
                 }
         ]
+
 
         for dt in data:
             response = self.client.post(list_url, dt, format='json')

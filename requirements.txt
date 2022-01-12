@@ -6,3 +6,4 @@ sphinx
 sphinx-rtd-theme
 django-heroku
 gunicorn
+djangorestframework-api-key

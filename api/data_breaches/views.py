@@ -2,6 +2,8 @@ from django.shortcuts import render
 from rest_framework import viewsets, response, status
 from rest_framework.decorators import action
 from rest_framework.permissions import BasePermission, IsAuthenticated, SAFE_METHODS
+from rest_framework_api_key.permissions import HasAPIKey
+from rest_framework.authentication import TokenAuthentication
 from .models import *
 from .serializers import *
 
@@ -12,6 +14,14 @@ class ReadOnly(BasePermission):
 class DataBreachViewSet(viewsets.ModelViewSet):
     """
     ViewSet with CRUD and list functions from data breaches.
+
+    To create, update and delete data breaches you need to pass the api-key
+    under the "Authorization" request header preceded by the string 'Api-Key'.
+    Example:
+
+    ```code
+    Authorization: Api-Key uxUQHQyq.y9idPHRxbcYNzQriuwAbkYC3fBupq6vw
+    ```
 
     To create a data breach you need to pass what entity is involved
     (organization_type is an option field describing the organization's sphere
@@ -40,7 +50,7 @@ class DataBreachViewSet(viewsets.ModelViewSet):
     """
     queryset = DataBreach.objects.all()
     serializer_class = DataBreachSerializer
-    permission_classes=[IsAuthenticated|ReadOnly]
+    permission_classes = [HasAPIKey | IsAuthenticated | ReadOnly]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data, many=isinstance(request.data, list))

@@ -11,10 +11,9 @@ An API that provides information about data breaches public reported(news, artic
 * sphinx (documentation)
 
 ## Live Demo
-~~Para acessar a demo da api use o link abaixo:
-https://databreaches-api.herokuapp.com/api/
-
-Api Key para utilizar na demo: `ul9LghN4.OcbYE1d2BVAPcBqkNpb72Z611K4946CN`~~
+~~Para acessar a demo da api use o link abaixo:~~
+~~ https://databreaches-api.herokuapp.com/api/ ~~
+~~ Api Key para utilizar na demo: `ul9LghN4.OcbYE1d2BVAPcBqkNpb72Z611K4946CN`~~
 
 Com o anúncio da heroku de remover o free tier o projeto estará sem demo por enquanto.
 
